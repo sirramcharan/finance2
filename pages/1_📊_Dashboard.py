@@ -11,7 +11,9 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+from utils.navigation import render_top_nav
 
+render_top_nav()
 from utils.theme import inject_css, svg_arc
 from utils.data_manager import DataManager
 from utils.formatters import (
