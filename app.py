@@ -135,14 +135,16 @@ nav_items = [
     ("🎯", "Savings Goals",  "Goals & SIP projector",       "pages/4_🎯_Savings_Goals.py"),
     ("🏦", "Loan Manager",   "EMI, prepayment & analysis",  "pages/5_🏦_Loan_Manager.py"),
 ]
-for col, (icon, title, desc, _path) in zip(nav_cols, nav_items):
+
+for col, (icon, title, desc, path) in zip(nav_cols, nav_items):
     with col:
-        st.markdown(f"""
-        <div class="glass-card" style="text-align:center;cursor:pointer;">
-            <div style="font-size:2rem;margin-bottom:0.4rem;">{icon}</div>
-            <div style="font-weight:700;color:rgba(255,255,255,0.9);">{title}</div>
-            <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;">{desc}</div>
-        </div>""", unsafe_allow_html=True)
+        if st.button(f"{icon} {title}", key=f"nav_{title}", use_container_width=True):
+            st.switch_page(path)
+
+        st.markdown(
+            f"<div style='font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;text-align:center;'>{desc}</div>",
+            unsafe_allow_html=True,
+        )
 
 st.markdown("<br>", unsafe_allow_html=True)
 
