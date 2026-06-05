@@ -57,6 +57,34 @@ with col_d:
 
 st.markdown("---")
 
+# ─── Global Top Navigation ───────────────────────────────────────────────────
+# This will appear on every page via st.switch_page targets
+st.markdown(
+    "<div class='section-header'>🔗 Quick Navigation</div>",
+    unsafe_allow_html=True,
+)
+
+nav_cols = st.columns(6)
+nav_items = [
+    ("🏠", "Home",           "Main dashboard",                "app.py"),
+    ("📊", "Dashboard",      "Charts & trends",               "pages/1_📊_Dashboard.py"),
+    ("💰", "Income",         "Sources & salary",              "pages/2_💰_Income.py"),
+    ("💳", "Expenses",       "Budget tracker",                "pages/3_💳_Expenses.py"),
+    ("🎯", "Savings",        "Goals & SIP",                   "pages/4_🎯_Savings_Goals.py"),
+    ("👤", "Profile",        "Edit defaults",                 "pages/6_👤_Profile_Defaults.py"),
+]
+
+for col, (icon, title, desc, path) in zip(nav_cols, nav_items):
+    with col:
+        if st.button(f"{icon} {title}", key=f"top_{title}", use_container_width=True):
+            st.switch_page(path)
+        st.markdown(
+            f"<div style='font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:0.1rem;text-align:center;'>{desc}</div>",
+            unsafe_allow_html=True,
+        )
+
+st.markdown("---")
+
 # ─── Quick Stats KPIs ─────────────────────────────────────────────────────────
 income   = get_total_income(data)
 expenses = get_total_expenses(data)
@@ -124,49 +152,25 @@ with right:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ─── Navigation Cards ────────────────────────────────────────────────────────
-st.markdown('<div class="section-header">📂 Quick Navigation</div>', unsafe_allow_html=True)
-
-nav_cols = st.columns(5)
-nav_items = [
-    ("📊", "Dashboard",      "Charts, KPIs & trends",       "pages/1_📊_Dashboard.py"),
-    ("💰", "Income",         "Sources & salary breakdown",  "pages/2_💰_Income.py"),
-    ("💳", "Expenses",       "Budget vs actual tracker",    "pages/3_💳_Expenses.py"),
-    ("🎯", "Savings Goals",  "Goals & SIP projector",       "pages/4_🎯_Savings_Goals.py"),
-    ("🏦", "Loan Manager",   "EMI, prepayment & analysis",  "pages/5_🏦_Loan_Manager.py"),
-]
-
-for col, (icon, title, desc, path) in zip(nav_cols, nav_items):
-    with col:
-        if st.button(f"{icon} {title}", key=f"nav_{title}", use_container_width=True):
-            st.switch_page(path)
-
-        st.markdown(
-            f"<div style='font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;text-align:center;'>{desc}</div>",
-            unsafe_allow_html=True,
-        )
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-# ─── Edit Profile ─────────────────────────────────────────────────────────────
-with st.expander("✏️ Edit Profile", expanded=False):
+# ─── Edit Profile Inline (Quick) ─────────────────────────────────────────────
+with st.expander("✏️ Quick Profile Edit", expanded=False):
     c1, c2, c3 = st.columns(3)
     with c1:
-        new_name = st.text_input("Your Name", value=name, key="profile_name")
+        new_name = st.text_input("Your Name", value=name, key="profile_name_home")
         if new_name != name:
             DataManager.set_key(new_name, "profile", "name")
     with c2:
         city_val = data["profile"]["city"]
-        new_city = st.text_input("City", value=city_val, key="profile_city")
+        new_city = st.text_input("City", value=city_val, key="profile_city_home")
         if new_city != city_val:
             DataManager.set_key(new_city, "profile", "city")
     with c3:
         emp_types = ["Internship", "Salaried", "Freelance"]
         emp_val = data["profile"]["employment_type"]
-        new_emp = st.selectbox("Employment Type", emp_types, index=emp_types.index(emp_val), key="profile_emp")
+        new_emp = st.selectbox("Employment Type", emp_types, index=emp_types.index(emp_val), key="profile_emp_home")
         if new_emp != emp_val:
             DataManager.set_key(new_emp, "profile", "employment_type")
 
-    if st.button("🔄 Reset All Data to Defaults", type="secondary"):
+    if st.button("🔄 Reset All Data to Defaults", type="secondary", key="reset_all_home"):
         DataManager.reset_to_defaults()
         st.rerun()
