@@ -1,0 +1,8 @@
+{
+  "_comment": "Default data is managed in utils/data_manager.py DEFAULT_DATA. This file is for reference.",
+  "profile": {"name": "Charan", "city": "Bangalore", "employment_type": "Internship"},
+  "income_monthly": 65000,
+  "loan_outstanding": 551985,
+  "loan_rate": 9.90,
+  "loan_tenure_months": 60
+}
