@@ -8,9 +8,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
-from utils.navigation import render_top_nav
-
-render_top_nav()
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
