@@ -1,7 +1,9 @@
 """pages/1_📊_Dashboard.py — Main dashboard with charts and KPIs."""
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.history import append_month_summary
+
+from utils.github_sync import append_summary_github
+
 
 import streamlit as st
 import pandas as pd
@@ -61,8 +63,13 @@ if st.button("💾 Save Monthly Snapshot"):
         "net_savings": savings,
         "savings_rate_pct": rate,
     }
-    append_month_summary(summary_row)
-    st.success("Monthly summary saved to Excel")
+    with st.spinner("Saving to GitHub..."):
+        ok = append_summary_github(summary_row)
+    if ok:
+        st.success("✅ Monthly summary saved to GitHub Excel!")
+    else:
+        st.error("❌ Save failed — check GitHub token in secrets.")
+
 
 st.markdown("<br>", unsafe_allow_html=True)
 
