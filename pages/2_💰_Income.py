@@ -5,7 +5,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from utils.history import append_transactions
+from utils.github_sync import append_transactions_github
+
 
 st.set_page_config(
     page_title="Income — FinTrack",
@@ -112,8 +113,14 @@ for src in data["income"]["sources"]:
 
 if records and st.button("💾 Save Income Transactions"):
     df_new = pd.DataFrame(records)
-    append_transactions(df_new)
-    st.success("Income transactions saved to Excel")
+
+    with st.spinner("Saving to GitHub..."):
+        ok = append_transactions_github(df_new)
+    if ok:
+        st.success("✅ Saved to GitHub Excel!")
+    else:
+        st.error("❌ Save failed — check GitHub token.")
+
 
 st.markdown("<br>", unsafe_allow_html=True)
 
