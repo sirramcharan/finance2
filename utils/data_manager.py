@@ -33,7 +33,7 @@ def _load_from_json() -> dict | None:
 
 class DataManager:
     KEY = "app_data"
-
+    
     @classmethod
     def initialize(cls):
         """Load from JSON file first, then fall back to defaults."""
@@ -46,9 +46,11 @@ class DataManager:
                 st.session_state[cls.KEY] = merged
             else:
                 st.session_state[cls.KEY] = copy.deepcopy(DEFAULT_DATA)
-
+    
+        # Ensure dismissed_alerts exists
         if "dismissed_alerts" not in st.session_state[cls.KEY]["ui"]:
             st.session_state[cls.KEY]["ui"]["dismissed_alerts"] = []
+
 
     @classmethod
     def _deep_merge(cls, base: dict, override: dict):
@@ -64,6 +66,11 @@ class DataManager:
         """Persist current session state to disk."""
         if cls.KEY in st.session_state:
             _save_to_json(st.session_state[cls.KEY])
+        else:
+            # Initialize session state if missing
+            cls.initialize()
+            _save_to_json(st.session_state[cls.KEY])
+
 
     @classmethod
     def get(cls) -> dict:
