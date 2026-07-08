@@ -14,11 +14,11 @@ st.set_page_config(
 
 render_top_nav()
 DataManager.initialize()
-import os
+
+# ── Bootstrap check ───────────────────────────────────────────────────────────
 DATA_DIR  = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 JSON_PATH = os.path.join(DATA_DIR, "app_data.json")
 
-# Check if app_data.json exists
 if not os.path.exists(JSON_PATH):
     st.warning("⚠️ No saved data file found. Click below to create it.")
     if st.button("🚀 Create app_data.json now"):
