@@ -83,7 +83,8 @@ with col_next:
                 DataManager.set_key(MONTHS[idx+1], "ui", "current_month")
                 st.rerun()
 
-is_current = data["ui"]["current_month"] == "June 2026"
+# REPLACE with:
+is_current = data["ui"]["current_month"] == datetime.now().strftime("%B %Y")  # ✅
 if not is_current:
     st.info(f"📖 Viewing {data['ui']['current_month']} — read-only historical view.")
 
