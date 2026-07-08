@@ -229,6 +229,15 @@ class DataManager:
         cat["id"] = max((c["id"] for c in cats), default=0) + 1
         cats.append(cat)
         cls.save()
+    @classmethod
+    def delete_expense_category(cls, cat_id: int):
+        """Delete an expense category by id."""
+        cls.initialize()
+        cats = st.session_state[cls.KEY]["expenses"]["categories"]
+        st.session_state[cls.KEY]["expenses"]["categories"] = [
+            c for c in cats if c["id"] != cat_id
+        ]
+        cls.save()
 
     @classmethod
     def add_rate_history(cls, entry: dict):
