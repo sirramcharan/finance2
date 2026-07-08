@@ -67,12 +67,18 @@ edited_df = st.data_editor(
 )
 
 # Sync back
+# In income.py — replace the sync block with this:
 if edited_df is not None:
     records = edited_df.to_dict("records")
     for i, r in enumerate(records):
         r["id"] = i + 1
-    DataManager.update_income_sources(records)
-    data = DataManager.get()
+
+    # Only save if something actually changed 🔄
+    current = data["income"]["sources"]
+    if records != current:
+        DataManager.update_income_sources(records)
+        data = DataManager.get()
+
 
 # Totals row
 income_total = get_total_income(data)
