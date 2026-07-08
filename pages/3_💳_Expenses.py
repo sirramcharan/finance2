@@ -1,6 +1,9 @@
 """pages/3_💳_Expenses.py — Expense tracking with budget vs actual cards."""
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from datetime import datetime
+import pandas as pd
+from utils.history import append_transactions
 
 import streamlit as st
 
