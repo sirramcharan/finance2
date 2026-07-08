@@ -142,6 +142,31 @@ for row_start in range(0, len(cats), 2):
 
 st.markdown("<br>", unsafe_allow_html=True)
 
+
+# ─── Save Transactions to Excel ──────────────────────────────────────────────
+current_month = data["ui"]["current_month"]
+today = datetime.now().date()
+
+records = []
+for cat in data["expenses"]["categories"]:
+    if cat["actual"] > 0:
+        records.append({
+            "date": today,
+            "month": current_month,
+            "type": "expense",
+            "category": cat["name"],
+            "description": cat["name"],
+            "amount": cat["actual"],
+        })
+
+if records and st.button("💾 Save Expense Transactions"):
+    df_new = pd.DataFrame(records)
+    append_transactions(df_new)
+    st.success("Expense transactions saved to Excel")
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+
 # ─── Add New Category ─────────────────────────────────────────────────────────
 with st.expander("➕ Add New Category"):
     with st.form("add_cat_form"):
