@@ -43,8 +43,21 @@ st.markdown("""
 st.markdown("---")
 
 # ─── Section 1: Month Navigator ──────────────────────────────────────────────
-MONTHS = ["January 2026","February 2026","March 2026","April 2026",
-          "May 2026","June 2026"]
+# REPLACE with this:
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+def generate_months(n_past: int = 6, n_future: int = 12) -> list[str]:
+    """Generate month list: n_past months ago → n_future months ahead."""
+    today = datetime.now().replace(day=1)
+    months = []
+    for i in range(-n_past, n_future + 1):
+        m = today + relativedelta(months=i)
+        months.append(m.strftime("%B %Y"))
+    return months
+
+MONTHS = generate_months(n_past=6, n_future=12)
+
 
 col_prev, col_mid, col_next = st.columns([1, 3, 1])
 with col_prev:
