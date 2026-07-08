@@ -84,6 +84,30 @@ st.markdown(f"""
 
 st.markdown("<br>", unsafe_allow_html=True)
 
+# ─── Save Transactions to Excel ──────────────────────────────────────────────
+current_month = data["ui"]["current_month"]  # e.g. "2026-07"
+today = datetime.now().date()
+
+records = []
+for src in data["income"]["sources"]:
+    if src["status"] == "Active" and src["amount"] > 0:
+        records.append({
+            "date": today,
+            "month": current_month,
+            "type": "income",
+            "category": src["type"],
+            "description": src["name"],
+            "amount": src["amount"],
+        })
+
+if records and st.button("💾 Save Income Transactions"):
+    df_new = pd.DataFrame(records)
+    append_transactions(df_new)
+    st.success("Income transactions saved to Excel")
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+
 # ─── Section 2: Salaried Mode ────────────────────────────────────────────────
 st.markdown('<div class="section-header">🏢 Salaried Employee — CTC Breakdown</div>', unsafe_allow_html=True)
 
