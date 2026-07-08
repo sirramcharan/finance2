@@ -50,6 +50,24 @@ expenses = get_total_expenses(data)
 savings  = get_net_savings(data)
 rate     = get_savings_rate(data)
 
+# ─── Save Snapshot to Excel ──────────────────────────────────────────────────
+current_month = data["ui"]["current_month"]
+
+if st.button("💾 Save Monthly Snapshot"):
+    summary_row = {
+        "month": current_month,
+        "total_income": income,
+        "total_expenses": expenses,
+        "net_savings": savings,
+        "savings_rate_pct": rate,
+    }
+    append_month_summary(summary_row)
+    st.success("Monthly summary saved to Excel")
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+
+
 c1, c2, c3, c4 = st.columns(4)
 
 with c1:
