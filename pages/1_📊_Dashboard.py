@@ -1,6 +1,7 @@
 """pages/1_📊_Dashboard.py — Main dashboard with charts and KPIs."""
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.history import append_month_summary
 
 import streamlit as st
 import pandas as pd
