@@ -141,18 +141,28 @@ for row_start in range(0, len(cats), 2):
                 </div>
             </div>""", unsafe_allow_html=True)
 
+# REPLACE with this:
             if is_current:
-                new_actual = st.number_input(
-                    f"✏️ {cat['name']} actual (₹)",
-                    value=float(actual),
-                    step=100.0,
-                    format="%.0f",
-                    key=f"cat_actual_{cat['id']}",
-                    label_visibility="collapsed",
-                )
-                if int(new_actual) != actual:
-                    DataManager.update_expense_category(cat["id"], "actual", int(new_actual))
-                    st.rerun()
+                col_input, col_del = st.columns([4, 1])
+
+                with col_input:
+                    new_actual = st.number_input(
+                        f"✏️ {cat['name']} actual (₹)",
+                        value=float(actual),
+                        step=100.0,
+                        format="%.0f",
+                        key=f"cat_actual_{cat['id']}",
+                        label_visibility="collapsed",
+                    )
+                    if int(new_actual) != actual:
+                        DataManager.update_expense_category(cat["id"], "actual", int(new_actual))
+                        st.rerun()
+
+                with col_del:
+                    if st.button("🗑️", key=f"del_cat_{cat['id']}", help=f"Delete {cat['name']}"):
+                        DataManager.delete_expense_category(cat["id"])
+                        st.rerun()
+
 
 st.markdown("<br>", unsafe_allow_html=True)
 
