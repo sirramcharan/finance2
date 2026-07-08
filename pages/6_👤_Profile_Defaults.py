@@ -52,23 +52,3 @@ if st.button("💾 Save Profile"):
 if st.button("🔄 Reset All Data to Defaults"):
     DataManager.reset_to_defaults()
     st.success("All data reset — refresh the app.")
-
-# Debugging sidebar
-st.sidebar.markdown("### Debug Info")
-st.sidebar.write("Session State Keys:", list(st.session_state.keys()))
-st.sidebar.write("Session State Exists:", "app_data" in st.session_state)
-st.sidebar.write("JSON Path:", JSON_PATH)
-st.sidebar.write("JSON Exists:", os.path.exists(JSON_PATH))
-
-if not os.path.exists(JSON_PATH):
-    st.warning("⚠️ No saved data file found. Click below to create it.")
-    if st.button("🚀 Create app_data.json now"):
-        try:
-            DataManager.save()
-            st.success(f"✅ Created! File saved at: {JSON_PATH}")
-            st.rerun()
-        except Exception as e:
-            st.error(f"❌ Error creating file: {e}")
-else:
-    st.sidebar.success("✅ app_data.json exists")
-
