@@ -3,7 +3,7 @@ import copy
 import json
 import os
 import streamlit as st
-
+from datetime import datetime
 # ── Persistence paths ─────────────────────────────────────────────────────────
 DATA_DIR  = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data"
@@ -105,9 +105,10 @@ DEFAULT_DATA = {
             {"name": "Credit Card Due", "amount": 0},
         ],
     },
+    # Then change DEFAULT_DATA "ui" section to:
     "ui": {
         "dismissed_alerts": [],
-        "current_month": "June 2026",
+        "current_month": datetime.now().strftime("%B %Y"),  # ← always today's month
     },
 }
 
