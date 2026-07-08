@@ -133,7 +133,7 @@ class DataManager:
         # Safety net for missing sub-keys
         ui = st.session_state[cls.KEY].setdefault("ui", {})
         ui.setdefault("dismissed_alerts", [])
-        ui.setdefault("current_month", "June 2026")
+        ui.setdefault("current_month", datetime.now().strftime("%B %Y"))
 
     @classmethod
     def _deep_merge(cls, base: dict, override: dict):
