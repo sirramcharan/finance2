@@ -73,9 +73,13 @@ if edited_df is not None:
     for i, r in enumerate(records):
         r["id"] = i + 1
 
-    # Only save if something actually changed 🔄
     current = data["income"]["sources"]
-    if records != current:
+
+    # Normalize for comparison (drop id for clean diff)
+    def normalize(src_list):
+        return [{k: v for k, v in s.items() if k != "id"} for s in src_list]
+
+    if normalize(records) != normalize(current):
         DataManager.update_income_sources(records)
         data = DataManager.get()
 
