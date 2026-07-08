@@ -185,8 +185,13 @@ for cat in data["expenses"]["categories"]:
 
 if records and st.button("💾 Save Expense Transactions"):
     df_new = pd.DataFrame(records)
-    append_transactions(df_new)
-    st.success("Expense transactions saved to Excel")
+    with st.spinner("Saving to GitHub..."):
+        ok = append_transactions_github(df_new)
+    if ok:
+        st.success("✅ Saved to GitHub Excel!")
+    else:
+        st.error("❌ Save failed — check GitHub token in Streamlit secrets.")
+
 
 st.markdown("<br>", unsafe_allow_html=True)
 
