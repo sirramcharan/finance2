@@ -14,6 +14,20 @@ st.set_page_config(
 
 render_top_nav()
 DataManager.initialize()
+import os
+DATA_DIR  = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
+JSON_PATH = os.path.join(DATA_DIR, "app_data.json")
+
+# Check if app_data.json exists
+if not os.path.exists(JSON_PATH):
+    st.warning("⚠️ No saved data file found. Click below to create it.")
+    if st.button("🚀 Create app_data.json now"):
+        DataManager.save()
+        st.success(f"✅ Created! File saved at: {JSON_PATH}")
+        st.rerun()
+else:
+    st.sidebar.success("✅ app_data.json exists")
+
 data = DataManager.get()
 
 st.markdown("<div class='page-title'>👤 Profile & Defaults</div>", unsafe_allow_html=True)
