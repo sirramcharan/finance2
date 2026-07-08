@@ -1,0 +1,3 @@
+# In .gitignore
+data/app_data.json
+data/finance_history.xlsx
