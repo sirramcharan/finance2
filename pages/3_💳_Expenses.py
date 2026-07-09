@@ -3,7 +3,8 @@ import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from datetime import datetime
 import pandas as pd
-from utils.history import append_transactions
+from utils.github_sync import append_transactions_github
+
 
 import streamlit as st
 
