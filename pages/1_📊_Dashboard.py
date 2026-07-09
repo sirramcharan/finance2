@@ -14,9 +14,13 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
-from utils.navigation import render_top_nav
+#from utils.navigation import render_top_nav
 
+# REPLACE with:
+from utils.navigation import check_password, render_top_nav
+check_password()   # ← blocks page if not unlocked
 render_top_nav()
+
 from utils.theme import inject_css, svg_arc
 from utils.data_manager import DataManager
 from utils.formatters import (
