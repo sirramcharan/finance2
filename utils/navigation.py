@@ -1,5 +1,38 @@
 import streamlit as st
 
+import streamlit as st
+
+def check_password():
+    """Block page if password not entered. Call at top of every page."""
+    if st.session_state.get("pw_ok"):
+        return  # ✅ Already unlocked
+
+    # Hide sidebar
+    st.markdown("""
+        <style>
+            [data-testid="stSidebar"] {display: none;}
+            [data-testid="collapsedControl"] {display: none;}
+        </style>
+    """, unsafe_allow_html=True)
+
+    st.title("🔒 FinTrack — Private Access")
+    st.markdown(
+        "<div style='color:rgba(255,255,255,0.5);margin-bottom:1rem;'>"
+        "Enter the password to access your financial dashboard.</div>",
+        unsafe_allow_html=True
+    )
+
+    pw = st.text_input("Password:", type="password", key="pw_input")
+
+    if st.button("🔓 Unlock", type="primary"):
+        PASSWORD = st.secrets.get("APP_PASSWORD", "fintrack")
+        if pw == PASSWORD:
+            st.session_state["pw_ok"] = True
+            st.rerun()
+        else:
+            st.error("❌ Incorrect password.")
+    st.stop()
+
 
 def render_top_nav():
     """Global top navigation bar to switch between main sections."""
