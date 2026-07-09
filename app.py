@@ -9,7 +9,16 @@ def password_gate():
     if st.session_state.get("pw_ok"):
         return  # ✅ Already unlocked — skip gate
 
+    # ── Hide sidebar on password page ────────────────────────────────────────
+    st.markdown("""
+        <style>
+            [data-testid="stSidebar"] {display: none;}
+            [data-testid="collapsedControl"] {display: none;}
+        </style>
+    """, unsafe_allow_html=True)
+
     st.title("🔒 FinTrack — Private Access")
+
     st.markdown(
         "<div style='color:rgba(255,255,255,0.5);margin-bottom:1rem;'>"
         "Enter the password to access your financial dashboard.</div>",
