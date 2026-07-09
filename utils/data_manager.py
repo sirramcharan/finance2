@@ -119,21 +119,29 @@ class DataManager:
 
     KEY = "app_data"
 
+    # REPLACE WITH:
     @classmethod
     def initialize(cls):
+        from datetime import datetime
         if cls.KEY not in st.session_state:
-            saved = _load_from_json()
+            # Try loading from GitHub Excel first
+            try:
+                from utils.state_sync import load_app_state_from_github
+                saved = load_app_state_from_github()
+            except Exception:
+                saved = None
+    
             if saved:
                 merged = copy.deepcopy(DEFAULT_DATA)
                 cls._deep_merge(merged, saved)
                 st.session_state[cls.KEY] = merged
             else:
                 st.session_state[cls.KEY] = copy.deepcopy(DEFAULT_DATA)
-
-        # Safety net for missing sub-keys
+    
         ui = st.session_state[cls.KEY].setdefault("ui", {})
         ui.setdefault("dismissed_alerts", [])
         ui.setdefault("current_month", datetime.now().strftime("%B %Y"))
+    
 
     @classmethod
     def _deep_merge(cls, base: dict, override: dict):
@@ -143,10 +151,23 @@ class DataManager:
             else:
                 base[key] = val
 
+    # REPLACE WITH:
     @classmethod
     def save(cls):
-        cls.initialize()  # ensure state exists before saving
-        _save_to_json(st.session_state[cls.KEY])
+        """Save to GitHub Excel (primary) + local JSON (backup)."""
+        if cls.KEY not in st.session_state:
+            return
+        try:
+            from utils.state_sync import save_app_state_to_github
+            save_app_state_to_github(st.session_state[cls.KEY])
+        except Exception as e:
+            st.warning(f"⚠️ GitHub save skipped: {e}")
+        # Also save local JSON as backup
+        try:
+            _save_to_json(st.session_state[cls.KEY])
+        except Exception:
+            pass
+
 
     @classmethod
     def get(cls) -> dict:
