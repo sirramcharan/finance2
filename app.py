@@ -3,24 +3,31 @@ import streamlit as st
 
 # You can put your password here, or better, in Streamlit secrets
 # PASSWORD = "yourpassword"
-PASSWORD = st.secrets.get("APP_PASSWORD", "demo123")  # fallback to demo123 if not set
+PASSWORD = st.secrets.get("APP_PASSWORD", "fintrack")
 
 def password_gate():
-    if "pw_ok" not in st.session_state:
-        st.session_state["pw_ok"] = False
+    if st.session_state.get("pw_ok"):
+        return  # ✅ Already unlocked — skip gate
 
-    if not st.session_state["pw_ok"]:
-        st.title("🔒 FinTrack — Password Required")
-        pw = st.text_input("Enter password:", type="password")
-        if st.button("Unlock"):
-            if pw == PASSWORD:
-                st.session_state["pw_ok"] = True
-                st.experimental_rerun()
-            else:
-                st.error("Incorrect password. Try again.")
-        st.stop()
+    st.title("🔒 FinTrack — Private Access")
+    st.markdown(
+        "<div style='color:rgba(255,255,255,0.5);margin-bottom:1rem;'>"
+        "Enter the password to access your financial dashboard.</div>",
+        unsafe_allow_html=True
+    )
+
+    pw = st.text_input("Password:", type="password", key="pw_input")
+
+    if st.button("🔓 Unlock", type="primary"):
+        if pw == PASSWORD:
+            st.session_state["pw_ok"] = True
+            st.rerun()  # ✅ fixed
+        else:
+            st.error("❌ Incorrect password.")
+    st.stop()
 
 password_gate()
+
 
 import streamlit as st
 from datetime import datetime
