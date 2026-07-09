@@ -146,18 +146,60 @@ for row_start in range(0, len(cats), 2):
             if is_current:
                 col_input, col_del = st.columns([4, 1])
 
+# REPLACE WITH:
                 with col_input:
-                    new_actual = st.number_input(
-                        f"✏️ {cat['name']} actual (₹)",
-                        value=float(actual),
-                        step=100.0,
-                        format="%.0f",
-                        key=f"cat_actual_{cat['id']}",
-                        label_visibility="collapsed",
+                    st.markdown(
+                        f"<div style='font-size:0.8rem;color:rgba(255,255,255,0.5);"
+                        f"margin-bottom:0.25rem;'>Current: <b style='color:white'>"
+                        f"₹{actual:,}</b></div>",
+                        unsafe_allow_html=True
                     )
-                    if int(new_actual) != actual:
-                        DataManager.update_expense_category(cat["id"], "actual", int(new_actual))
-                        st.rerun()
+
+                    adj_col1, adj_col2 = st.columns(2)
+
+                    with adj_col1:
+                        add_amt = st.number_input(
+                            "➕ Add (₹)",
+                            min_value=0.0,
+                            value=0.0,
+                            step=100.0,
+                            format="%.0f",
+                            key=f"add_{cat['id']}",
+                        )
+
+                    with adj_col2:
+                        sub_amt = st.number_input(
+                            "➖ Subtract (₹)",
+                            min_value=0.0,
+                            value=0.0,
+                            step=100.0,
+                            format="%.0f",
+                            key=f"sub_{cat['id']}",
+                        )
+
+                    btn_col1, btn_col2, btn_col3 = st.columns(3)
+
+                    with btn_col1:
+                        if st.button("➕ Add", key=f"btn_add_{cat['id']}", use_container_width=True):
+                            if add_amt > 0:
+                                new_val = actual + int(add_amt)
+                                DataManager.update_expense_category(cat["id"], "actual", new_val)
+                                st.rerun()
+
+                    with btn_col2:
+                        if st.button("➖ Sub", key=f"btn_sub_{cat['id']}", use_container_width=True):
+                            if sub_amt > 0:
+                                new_val = max(0, actual - int(sub_amt))
+                                DataManager.update_expense_category(cat["id"], "actual", new_val)
+                                st.rerun()
+
+                    with btn_col3:
+                        if st.button("✏️ Set", key=f"btn_set_{cat['id']}", use_container_width=True):
+                            new_set = st.session_state.get(f"add_{cat['id']}", 0)
+                            if new_set > 0:
+                                DataManager.update_expense_category(cat["id"], "actual", int(new_set))
+                                st.rerun()
+
 
                 with col_del:
                     if st.button("🗑️", key=f"del_cat_{cat['id']}", help=f"Delete {cat['name']}"):
