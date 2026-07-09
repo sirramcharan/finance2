@@ -56,12 +56,35 @@ with c3:
     emp_type = st.selectbox("Employment Type", emp_types,
                              index=emp_types.index(profile["employment_type"]))
 
+# REPLACE WITH:
 if st.button("💾 Save Profile"):
     DataManager.set_key(name, "profile", "name")
     DataManager.set_key(city, "profile", "city")
     DataManager.set_key(emp_type, "profile", "employment_type")
-    st.success("Profile updated!")
+    with st.spinner("Saving to GitHub..."):
+        from utils.state_sync import save_app_state_to_github
+        ok = save_app_state_to_github(DataManager.get())
+    if ok:
+        st.success("✅ Profile saved permanently to GitHub!")
+    else:
+        st.error("❌ Save failed.")
+
 
 if st.button("🔄 Reset All Data to Defaults"):
     DataManager.reset_to_defaults()
     st.success("All data reset — refresh the app.")
+
+
+st.markdown("---")
+st.markdown("### 💾 Save All App Data")
+st.caption("Saves income, expenses, goals, loan settings permanently to GitHub.")
+
+if st.button("💾 Save Everything to GitHub", type="primary"):
+    with st.spinner("Saving all data to GitHub Excel..."):
+        from utils.state_sync import save_app_state_to_github
+        ok = save_app_state_to_github(DataManager.get())
+    if ok:
+        st.success("✅ All data saved! Will persist across restarts.")
+    else:
+        st.error("❌ Save failed — check GitHub token.")
+
