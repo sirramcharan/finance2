@@ -12,7 +12,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+# REPLACE with:
+from utils.navigation import check_password, render_top_nav
+check_password()   # ← blocks page if not unlocked
 render_top_nav()
+
 DataManager.initialize()
 
 # ── Bootstrap check ───────────────────────────────────────────────────────────
