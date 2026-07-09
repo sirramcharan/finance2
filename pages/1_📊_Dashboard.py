@@ -55,6 +55,7 @@ rate     = get_savings_rate(data)
 # ─── Save Snapshot to Excel ──────────────────────────────────────────────────
 current_month = data["ui"]["current_month"]
 
+# REPLACE WITH:
 if st.button("💾 Save Monthly Snapshot"):
     summary_row = {
         "month": current_month,
@@ -68,7 +69,8 @@ if st.button("💾 Save Monthly Snapshot"):
     if ok:
         st.success("✅ Monthly summary saved to GitHub Excel!")
     else:
-        st.error("❌ Save failed — check GitHub token in secrets.")
+        st.error("❌ Save failed — check GitHub token in Streamlit secrets.")
+
 
 
 st.markdown("<br>", unsafe_allow_html=True)
